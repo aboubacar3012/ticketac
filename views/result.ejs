@@ -13,33 +13,21 @@
     <%- include('./_navbar.ejs') %>
     <div class="container">
         <div class="row">
+        
             <div class="col-12 col-md-8 offset-md-2">
-                <h2>Tickets available on #Date ICI</h2>
+          
+                <h2>Tickets available on <%=date%></h2>
                 <ul class="list-group">
+                    <% for(var i=0;i<journeys.length;i++){ %>
                     <li class="list-group-item d-flex justify-content-between align-items-center">
-                        <span>Paris/Lille</span>
-                        <span>Train departure at: 15h00</span>
+                        <span><%=journeys[i].departure%> /<%=journeys[i].arrival%> </span>
+                        <span>Train departure at: <%=journeys[i].departureTime%></span>
                         <div class="d-flex justify-content-between align-items-center">
-                            <strong>93 Euros</strong>&nbsp;
+                            <strong><%=journeys[i].price%> Euros</strong>&nbsp;
                             <button class="btn btn-danger btn-sm">OK</button>
                         </div>
                     </li>
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                        <span>Paris/Lille</span>
-                        <span>Train departure at: 15h00</span>
-                        <div class="d-flex justify-content-between align-items-center">
-                            <strong>93 Euros</strong>&nbsp;
-                            <button class="btn btn-danger btn-sm">OK</button>
-                        </div>
-                    </li>
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                        <span>Paris/Lille</span>
-                        <span>Train departure at: 15h00</span>
-                        <div class="d-flex justify-content-between align-items-center">
-                            <strong>93 Euros</strong>&nbsp;
-                            <button class="btn btn-danger btn-sm">OK</button>
-                        </div>
-                    </li>
+                    <%}%>
                 </ul>
             </div>
         </div>

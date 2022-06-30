@@ -66,7 +66,7 @@ const journeys= await journeyModel.find({date:req.body.date,
 departure: req.body.departure, arrival: req.body.arrival,
 })
 		console.log(journeys)
-		res.end()
+		res.render('result',{journeys, date:req.body.date} )
 })
 
 
