@@ -4,7 +4,7 @@ var {journeyModel}= require('../models/journey')
 
 
 var city = ["Paris","Marseille","Nantes","Lyon","Rennes","Melun","Bordeaux","Lille"]
-var date = ["2018-11-20","2018-11-21","2018-11-22","2018-11-23","2018-11-24"]
+var date = ["2022-07-20","2022-06-30","2022-06-25","2022-06-15","2022-07-24"]
 
 /* GET auth page. */
 router.get('/auth', function(req, res, next) {
@@ -31,7 +31,7 @@ router.get('/cart', function(req, res, next) {
 });
 
 
-// Remplissage de la base de donnée, une fois suffit
+// // Remplissage de la base de donnée, une fois suffit
 // router.get('/save', async function(req, res, next) {
 
 //   // How many journeys we want
@@ -61,27 +61,14 @@ router.get('/cart', function(req, res, next) {
 //   res.render('index', { title: 'Express' });
 // });
 
-
-// Cette route est juste une verification du Save.
-// Vous pouvez choisir de la garder ou la supprimer.
-// router.get('/resultat', function(req, res, next) {
-
-//   // Permet de savoir combien de trajets il y a par ville en base
-//   for(i=0; i<city.length; i++){
-
-//     journeyModel.find( 
-//       { departure: city[i] } , //filtre
-  
-//       function (err, journey) {
-
-//           console.log(`Nombre de trajets au départ de ${journey[0].departure} : `, journey.length);
-//       }
-//     )
-
-//   }
+router.post("/addticket", async function (req, res, next) {
+const journeys= await journeyModel.find({date:req.body.date,
+departure: req.body.departure, arrival: req.body.arrival,
+})
+		console.log(journeys)
+		res.end()
+})
 
 
-//   res.render('index', { title: 'Express' });
-// });
 
 module.exports = router;

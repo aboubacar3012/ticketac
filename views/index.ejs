@@ -12,16 +12,16 @@
     <%- include('./_navbar.ejs') %>
     <div class="container">
       <h2 class="text-center">One-way ticket: </h2>
-      <form action="">
+      <form action="/addticket" method="POST">>
         <div class="row justify-content-around m-auto">
           <div class="col-12 col-md-3 offset-md-1 mt-1">
-            <input type="text" class="form-control" placeholder="From: Paris, Marseille ..." aria-label="rom: Paris, Marseille ...">
+            <input name="departure" type="text" class="form-control" placeholder="From: Paris, Marseille ..." aria-label="rom: Paris, Marseille ...">
           </div>
           <div class="col-12 col-md-3 mt-1">
-            <input type="text" class="form-control" placeholder="To: Lille, Nantes ..." aria-label="To: Lille, Nantes ...">
+            <input name="arrival" type="text" class="form-control" placeholder="To: Lille, Nantes ..." aria-label="To: Lille, Nantes ...">
           </div>
           <div class="col-12 col-md-3 mt-1">
-            <input type="date" class="form-control" placeholder="Last name" aria-label="Last name">
+            <input name="date" type="date" class="form-control" placeholder="Last name" aria-label="Last name">
           </div>
           <div class="col-12 col-md-2 mt-1">
             <button type="submit" class="btn btn-danger">Go</button>
