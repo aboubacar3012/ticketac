@@ -11,11 +11,6 @@ router.get('/auth', function(req, res, next) {
   res.render('auth', { title: 'Express' });
 });
 
-/* GET result page. */
-router.get('/result', function(req, res, next) {
-  res.render('result', { title: 'Express' });
-});
-
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -61,11 +56,9 @@ router.get('/cart', function(req, res, next) {
 //   res.render('index', { title: 'Express' });
 // });
 
-router.post("/addticket", async function (req, res, next) {
+router.post("/result", async function (req, res, next) {
 const journeys= await journeyModel.find({date:req.body.date,
-departure: req.body.departure, arrival: req.body.arrival,
-})
-		console.log(journeys)
+departure: req.body.departure, arrival: req.body.arrival})
 		res.render('result',{journeys, date:req.body.date} )
 })
 
