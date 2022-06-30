@@ -40,6 +40,11 @@ router.get('/auth', function(req, res, next) {
   res.render('auth', { title: 'Express' });
 });
 
+/* GET result page. */
+router.get('/result', function(req, res, next) {
+  res.render('result', { title: 'Express' });
+});
+
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
