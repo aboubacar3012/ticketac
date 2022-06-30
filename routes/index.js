@@ -21,9 +21,9 @@ router.get('/not-found', function(req, res, next) {
   res.render('not-found', { title: 'Express' });
 });
 /* GET cart page. */
-router.get('/cart', function(req, res, next) {
-	
-  res.render('cart', { title: 'Express' });
+router.get('/cart', async function(req, res, next) {
+	const user = await userModel.findOne({email:req.session.user}).populate('journeys');
+  res.render('cart', { user });
 });
 
 /* GET cart page. */
