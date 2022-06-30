@@ -54,9 +54,15 @@ router.get('/', function(req, res, next) {
 router.get('/not-found', function(req, res, next) {
   res.render('not-found', { title: 'Express' });
 });
+
 /* GET cart page. */
 router.get('/cart', function(req, res, next) {
   res.render('cart', { title: 'Express' });
+});
+
+/* GET historic page. */
+router.get('/historic', function(req, res, next) {
+  res.render('historic', { title: 'Express' });
 });
 
 
