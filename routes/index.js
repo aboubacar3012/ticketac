@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var {journeyModel}= require('../models/journey')
-
+const {userModel} = require('../models/user');
 
 var city = ["Paris","Marseille","Nantes","Lyon","Rennes","Melun","Bordeaux","Lille"]
 var date = ["2022-07-20","2022-06-30","2022-06-25","2022-06-15","2022-07-24"]
@@ -22,9 +22,20 @@ router.get('/not-found', function(req, res, next) {
 });
 /* GET cart page. */
 router.get('/cart', function(req, res, next) {
+	
   res.render('cart', { title: 'Express' });
 });
 
+/* GET cart page. */
+router.get('/addjourney', async function(req, res, next) {
+	if (req.session.user){
+		const user= await userModel.findOne({email:req.session.user}).populate('journeys');
+		const journey = await journeyModel.findById(req.query.id);
+		user.journeys.push(journey)
+		await user.save()
+	}
+	res.redirect('/cart');
+  });
 
 // // Remplissage de la base de donnée, une fois suffit
 // router.get('/save', async function(req, res, next) {
@@ -59,7 +70,12 @@ router.get('/cart', function(req, res, next) {
 router.post("/result", async function (req, res, next) {
 const journeys= await journeyModel.find({date:req.body.date,
 departure: req.body.departure, arrival: req.body.arrival})
-		res.render('result',{journeys, date:req.body.date} )
+if(!journeys.length>0) 
+{
+	res.redirect ('/not-found')
+}else {
+	res.render('result',{journeys, date:req.body.date} )
+}
 })
 
 
