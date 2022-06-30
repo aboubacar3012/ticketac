@@ -50,9 +50,13 @@ router.get('/result', function(req, res, next) {
 router.get('/', function(req, res, next) {
   res.render('index', { title: 'Express' });
 });
-
+/* GET not-found page. */
 router.get('/not-found', function(req, res, next) {
   res.render('not-found', { title: 'Express' });
+});
+/* GET cart page. */
+router.get('/cart', function(req, res, next) {
+  res.render('cart', { title: 'Express' });
 });
 
 
