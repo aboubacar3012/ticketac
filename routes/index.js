@@ -14,28 +14,83 @@ router.get('/auth', function(req, res, next) {
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express' });
+  if(req.session.user){
+    res.render('index', { title: 'Express' });
+  }else{
+    res.redirect("/auth")
+  }
 });
 /* GET not-found page. */
 router.get('/not-found', function(req, res, next) {
-  res.render('not-found', { title: 'Express' });
+  if(req.session.user){
+    res.render('not-found', { title: 'Express' });
+  }else{
+    res.redirect("/auth")
+  }
 });
 /* GET cart page. */
 router.get('/cart', async function(req, res, next) {
-	const user = await userModel.findOne({email:req.session.user}).populate('journeys');
-  res.render('cart', { user });
+	if(req.session.user && req.session.journeys){
+    res.render('cart', { journeys: req.session.journeys });
+  }else{
+    res.redirect("/auth")
+  }
 });
 
 /* GET cart page. */
 router.get('/addjourney', async function(req, res, next) {
-	if (req.session.user){
-		const user= await userModel.findOne({email:req.session.user}).populate('journeys');
-		const journey = await journeyModel.findById(req.query.id);
-		user.journeys.push(journey)
-		await user.save()
-	}
-	res.redirect('/cart');
+  if(!req.session.journeys){
+    req.session.journeys = []
+  }
+  const journey = await journeyModel.findById(req.query.id);
+  if(journey){
+    req.session.journeys.push(journey);
+  }
+  
+  res.redirect("/cart")
   });
+
+router.get('/validate-cart',async function(req, res){
+  if(req.session.user){
+    const user= await userModel.findOne({email:req.session.user}).populate('journeys');
+    user.journeys.push(req.session.journeys)
+    await user.save();
+  }
+  res.redirect("/")
+})
+
+
+router.post("/result", async function (req, res, next) {
+  if(req.session.user){
+    const journeys = await journeyModel.find({date:req.body.date,
+      departure: req.body.departure, arrival: req.body.arrival})
+      if(!journeys.length>0) 
+      {
+        res.redirect ('/not-found')
+      }else {
+        res.render('result',{journeys, date:req.body.date} )
+      }
+  }
+  else{
+    res.redirect("/auth")
+  }
+})
+
+
+router.get('/historic',function(req,res){
+  if(req.session.user){
+    res.render('historic',{})
+  }else{
+    res.redirect("/auth")
+  }
+})
+
+router.get('/logout', function(req,res){
+  req.session.destroy();
+  res.redirect("/auth");
+})
+
+
 
 // // Remplissage de la base de donnée, une fois suffit
 // router.get('/save', async function(req, res, next) {
@@ -67,16 +122,6 @@ router.get('/addjourney', async function(req, res, next) {
 //   res.render('index', { title: 'Express' });
 // });
 
-router.post("/result", async function (req, res, next) {
-const journeys= await journeyModel.find({date:req.body.date,
-departure: req.body.departure, arrival: req.body.arrival})
-if(!journeys.length>0) 
-{
-	res.redirect ('/not-found')
-}else {
-	res.render('result',{journeys, date:req.body.date} )
-}
-})
 
 
 

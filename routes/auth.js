@@ -31,7 +31,7 @@ router.post('/login', async function(req, res, next) {
   }else{
     res.redirect("/auth");
   }
-  console.log(req.session.user)
+  // res.render("signup")
 });
 
 module.exports = router;
