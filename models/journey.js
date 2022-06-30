@@ -8,4 +8,4 @@ var journeySchema = mongoose.Schema({
   price: Number,
 });
 
-module.exports.journeyModel = mongoose.model('journey', journeySchema);
+module.exports.journeyModel = mongoose.model('journeys', journeySchema);
