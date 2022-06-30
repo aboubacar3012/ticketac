@@ -46,6 +46,10 @@ router.get('/', function(req, res, next) {
   res.render('index', { title: 'Express' });
 });
 
+router.get('/not-found', function(req, res, next) {
+  res.render('not-found', { title: 'Express' });
+});
+
 
 // Remplissage de la base de donnée, une fois suffit
 // router.get('/save', async function(req, res, next) {
