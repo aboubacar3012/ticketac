@@ -3,6 +3,7 @@ var router = express.Router();
 var {journeyModel}= require('../models/journey')
 const {userModel} = require('../models/user');
 
+
 var city = ["Paris","Marseille","Nantes","Lyon","Rennes","Melun","Bordeaux","Lille"]
 var date = ["2022-07-20","2022-06-30","2022-06-25","2022-06-15","2022-07-24"]
 

@@ -30,7 +30,7 @@
                journeys.forEach(function(journey){ %>
               <tr>
                 <th><%= journey.departure %> / <%= journey.arrival %></th>
-                <th><%= journey.date %></th>
+                <th><%= format_date(journey.date) %></th>
                 <th><%= journey.departureTime %></th>
                 <th><%= (journey.price).toFixed(2) %> €</th>
                 <th>

@@ -20,7 +20,7 @@
             <tbody>
               <% journeys.forEach(function(journey){ %>
               <tr>
-                <td><%= journey.date %></td>
+                <td><%= format_date(journey.date) %></td>
                 <td><%= journey.departure %> / <%= journey.arrival %></td>
                 <td><%= journey.departureTime %></td>
                 <td><%= (journey.price).toFixed(2) %> Euros</td>
