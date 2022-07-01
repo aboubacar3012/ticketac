@@ -80,9 +80,11 @@ router.post("/result", async function (req, res, next) {
 })
 
 
-router.get('/historic',function(req,res){
-  if(req.session.user){
-    res.render('historic',{})
+router.get('/historic', async function(req,res, next){
+  if(req.session.user){   
+    const user= await userModel.findOne({email:req.session.user}).populate('journeys');
+
+    res.render('historic',{journeys:user.journeys})
   }else{
     res.redirect("/auth")
   }
