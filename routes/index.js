@@ -14,7 +14,7 @@ router.get('/', function(req, res, next) {
   if(req.session.user){
     res.render('index', { title: 'Express' });
   }else{
-    res.redirect("/auth")
+    res.redirect("/auth/signin")
   }
 });
 /* GET not-found page. */
@@ -22,7 +22,7 @@ router.get('/not-found', function(req, res, next) {
   if(req.session.user){
     res.render('not-found', { title: 'Express' });
   }else{
-    res.redirect("/auth")
+    res.redirect("/auth/signin")
   }
 });
 /* GET cart page. */
@@ -32,7 +32,7 @@ router.get('/cart', async function(req, res, next) {
   }else if(req.session.user){
     res.redirect("/")
   }else{
-    res.redirect("/auth")
+    res.redirect("/auth/signin")
   }
 });
 
@@ -73,7 +73,7 @@ router.post("/result", async function (req, res, next) {
       }
   }
   else{
-    res.redirect("/auth")
+    res.redirect("/auth/signin")
   }
 })
 
@@ -81,11 +81,9 @@ router.post("/result", async function (req, res, next) {
 router.get('/historic', async function(req,res, next){
   if(req.session.user){   
     const user= await userModel.findOne({email:req.session.user}).populate('journeys');
-    // return res.send(user)
-
     res.render('historic',{journeys:user.journeys})
   }else{
-    res.redirect("/auth")
+    res.redirect("/auth/signin")
   }
 })
 
@@ -101,9 +99,17 @@ router.get('/delete/:id', function(req,res){
 
 router.get('/logout', function(req,res){
   req.session.destroy();
-  res.redirect("/auth");
+  res.redirect("/auth/signin");
 })
 
+router.get('/profile', async function(req,res){
+  if(req.session.user){   
+    const user= await userModel.findOne({email:req.session.user}).populate('journeys');
+    res.render("profile",{user, journeys: user.journeys})
+  }else{
+    res.redirect("/auth/signin")
+  }
+})
 
 // // Remplissage de la base de donnée, une fois suffit
 // router.get('/save', async function(req, res, next) {

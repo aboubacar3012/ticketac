@@ -2,25 +2,28 @@ var express = require('express');
 var router = express.Router();
 const { faker } = require('@faker-js/faker');
 const {userModel} = require('../models/user');
-/* GET auth page. */
-router.get('/', function(req, res, next) {
-  res.render('auth', { title: 'Express', message: req.flash('message') ? req.flash('message') : ""});
-});
+
+router.get('/signin', function(req,res){
+  res.render("login", { title: 'Express', message: req.flash('message') ? req.flash('message') : ""});
+})
+router.get('/signup', function(req,res){
+  res.render("signup", { title: 'Express', message: req.flash('message') ? req.flash('message') : ""});
+})
 
 
 /* POST user . */
-router.post('/sign-up', async function(req, res, next) {
+router.post('/signup', async function(req, res, next) {
   const user = await userModel.findOne({email: req.body.email});
   if(user){
-    res.redirect("/auth")
+    req.flash('message', 'Vous avez deja un adresse mail veillez vous connecter');
+    res.redirect("/auth/signup")
   }else{
     const newUser = new userModel({
       ...req.body,
       avatar: faker.image.avatar(),
     })
-    const savedUser = newUser.save();
+    const savedUser = await newUser.save();
     req.session.user = savedUser.email;
-    console.log(req.session.user);
     res.redirect("/");
   }
 });
@@ -34,12 +37,12 @@ router.post('/login', async function(req, res, next) {
       res.redirect("/")
     }else{
       // req.session.message = "Votre mot de passe est incorrect, veillez ressayer un autre !!!"
-      req.flash('message', 'Votre mot de passe est incorrect, veillez ressayer un autre !!!');
-      res.redirect("/auth");
+      req.flash('message', 'Votre mot de passe est incorrect !!!');
+      res.redirect("/auth/signin");
     }
   }else{
     req.flash('message', 'Votre adresse mail est est incorrect !!!!');
-    res.redirect("/auth");
+    res.redirect("/auth/signin");
   }
   // res.render("signup")
 });
