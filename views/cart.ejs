@@ -24,17 +24,22 @@
               </tr>
             </thead>
             <tbody>
-              <% journeys.forEach(function(journey){ %>
+              <%
+              let total = 0;
+               journeys.forEach(function(journey){ %>
               <tr>
                 <th><%= journey.departure %> / <%= journey.arrival %></th>
                 <th><%= journey.date %></th>
                 <th><%= journey.departureTime %></th>
                 <th><%= (journey.price).toFixed(2) %> €</th>
               </tr>
-              <% }) %>
+              <%
+                total+= journey.price
+                })
+               %>
               <tr class="list-group-item-danger">
                 <td colspan="3"><strong>Total</stro></td>
-                <td><strong>218 €</strong></td>
+                <td><strong><%= total.toFixed(2)%> €</strong></td>
               </tr>
             </tbody>
           </table>
@@ -79,14 +84,6 @@
         </div>
       </div>
     </div>
-    <script>
-      const myModal = document.getElementById('myModal')
-      const myInput = document.getElementById('myInput')
-
-      myModal.addEventListener('shown.bs.modal', () => {
-        myInput.focus()
-      })
-    </script>
     <%- include('./_jsImports.ejs') %>
 </body>
 </html>
