@@ -32,6 +32,8 @@ router.get('/not-found', function(req, res, next) {
 router.get('/cart', async function(req, res, next) {
 	if(req.session.user && req.session.journeys){
     res.render('cart', { journeys: req.session.journeys });
+  }else if(req.session.user){
+    res.redirect("/")
   }else{
     res.redirect("/auth")
   }
@@ -55,6 +57,7 @@ router.get('/validate-cart',async function(req, res){
     const user= await userModel.findOne({email:req.session.user}).populate('journeys');
     user.journeys.push(req.session.journeys)
     await user.save();
+    req.session.journeys = []
   }
   res.redirect("/")
 })
@@ -82,6 +85,16 @@ router.get('/historic',function(req,res){
     res.render('historic',{})
   }else{
     res.redirect("/auth")
+  }
+})
+
+router.get('/delete/:id', function(req,res){
+  if(req.session.user && req.session.journeys){
+    req.session.journeys = req.session.journeys.filter(journey => journey._id !== req.params.id);
+    res.redirect("/cart");
+  }
+  else{
+    res.redirect("/")
   }
 })
 
