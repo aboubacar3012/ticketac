@@ -7,10 +7,6 @@ const {userModel} = require('../models/user');
 var city = ["Paris","Marseille","Nantes","Lyon","Rennes","Melun","Bordeaux","Lille"]
 var date = ["2022-07-20","2022-06-30","2022-06-25","2022-06-15","2022-07-24"]
 
-/* GET auth page. */
-router.get('/auth', function(req, res, next) {
-  res.render('auth', { title: 'Express' });
-});
 
 
 /* GET home page. */
@@ -56,7 +52,8 @@ router.get('/addjourney', async function(req, res, next) {
 router.get('/validate-cart',async function(req, res){
   if(req.session.user){
     const user= await userModel.findOne({email:req.session.user}).populate('journeys');
-    user.journeys.push(req.session.journeys)
+    req.session.journeys.map((el) => user.journeys.push(el._id));
+    // user.journeys.push(req.session.journeys)
     await user.save();
     req.session.journeys = []
   }
@@ -84,6 +81,7 @@ router.post("/result", async function (req, res, next) {
 router.get('/historic', async function(req,res, next){
   if(req.session.user){   
     const user= await userModel.findOne({email:req.session.user}).populate('journeys');
+    // return res.send(user)
 
     res.render('historic',{journeys:user.journeys})
   }else{

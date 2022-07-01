@@ -6,6 +6,7 @@ var logger = require('morgan');
 var session = require('express-session')
 require('dotenv').config()
 require('./models/bdd');
+var flash = require('req-flash');
 
 var indexRouter = require('./routes/index');
 var authRouter = require('./routes/auth');
@@ -21,6 +22,7 @@ app.use(session({
   resave: false,
   saveUninitialized: true,
 }))
+app.use(flash());
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
