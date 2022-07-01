@@ -1,10 +1,12 @@
 var express = require('express');
 var router = express.Router();
+const { faker } = require('@faker-js/faker');
 const {userModel} = require('../models/user');
 /* GET auth page. */
 router.get('/', function(req, res, next) {
-  res.render('auth', { title: 'Express', message: req.flash('message') ? req.flash('message') : "" });
+  res.render('auth', { title: 'Express', message: req.flash('message') ? req.flash('message') : ""});
 });
+
 
 /* POST user . */
 router.post('/sign-up', async function(req, res, next) {
@@ -13,7 +15,8 @@ router.post('/sign-up', async function(req, res, next) {
     res.redirect("/auth")
   }else{
     const newUser = new userModel({
-      ...req.body
+      ...req.body,
+      avatar: faker.image.avatar(),
     })
     const savedUser = newUser.save();
     req.session.user = savedUser.email;

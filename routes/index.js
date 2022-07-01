@@ -28,7 +28,7 @@ router.get('/not-found', function(req, res, next) {
 /* GET cart page. */
 router.get('/cart', async function(req, res, next) {
 	if(req.session.user && req.session.journeys){
-    res.render('cart', { journeys: req.session.journeys });
+    res.render('cart', { journeys: req.session.journeys});
   }else if(req.session.user){
     res.redirect("/")
   }else{
