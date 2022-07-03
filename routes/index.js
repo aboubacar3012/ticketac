@@ -2,10 +2,11 @@ var express = require('express');
 var router = express.Router();
 var {journeyModel}= require('../models/journey')
 const {userModel} = require('../models/user');
+const stripe = require('stripe')('sk_test_tMh5UoZZAh1KzBHpSVXZanJk00hfDJaIX1')
 
 
 var city = ["Paris","Marseille","Nantes","Lyon","Rennes","Melun","Bordeaux","Lille"]
-var date = ["2022-07-20","2022-06-30","2022-06-25","2022-06-15","2022-07-24"]
+var date = ["2022-07-03","2022-07-04","2022-07-05","2022-07-03","2022-07-04","2022-07-05"]
 
 
 
@@ -51,20 +52,62 @@ router.get('/addjourney', async function(req, res, next) {
 
 router.get('/validate-cart',async function(req, res){
   if(req.session.user){
+    console.log(req.session.journeys)
     const user= await userModel.findOne({email:req.session.user}).populate('journeys');
     req.session.journeys.map((el) => user.journeys.push(el._id));
     // user.journeys.push(req.session.journeys)
     await user.save();
     req.session.journeys = []
   }
-  res.redirect("/")
+  res.redirect("/success")
 })
+
+router.post('/create-checkout-session', async (req, res) => {
+  const carts = [];
+  if(req.session.user || req.session.journeys.length > 0 ){
+    req.session.journeys.forEach(function(journey){
+      const items = {
+        price_data: {
+          currency: 'eur',
+          product_data: {
+            name: `${journey.departure}/${journey.arrival}`,
+            images: ["https://media.istockphoto.com/vectors/high-speed-train-modern-flat-design-vector-illustration-vector-id684767302?k=20&m=684767302&s=612x612&w=0&h=kbunA6-wP9GWb0iPUuoEBk4Tkx8Uh8XUP16b49hO9bo=",]
+          },
+          unit_amount: (journey.price).toFixed(2)*100,
+        },
+        quantity: 1,
+      }
+      carts.push(items);
+    });
+    // carts.push({
+    //   price_data: {
+    //     currency: 'eur',
+    //     product_data: {
+    //       name: "Frais de port",
+    //     },
+    //     unit_amount: ( 30 - (30 * req.session.reduction))*100,
+    //   },
+    //   quantity: req.session.nbFraisPort,
+    // })
+    
+    
+  }else{
+    res.redirect("/");
+  }
+  const session = await stripe.checkout.sessions.create({
+    line_items: carts,
+    mode: 'payment',
+    success_url: `${process.env.api_url}/validate-cart`,
+    cancel_url: `${process.env.api_url}/fail`,
+  });
+
+  res.redirect(303, session.url);
+});
 
 
 router.post("/result", async function (req, res, next) {
   if(req.session.user){
-    const journeys = await journeyModel.find({date:req.body.date,
-      departure: req.body.departure, arrival: req.body.arrival})
+    const journeys = await journeyModel.find({date:req.body.date,departure: req.body.departure, arrival: req.body.arrival}).sort({price:1})
       if(!journeys.length>0) 
       {
         res.redirect ('/not-found')
@@ -111,11 +154,18 @@ router.get('/profile', async function(req,res){
   }
 })
 
-// // Remplissage de la base de donnée, une fois suffit
+router.get('/success',function(req,res){
+  res.render("success",{})
+})
+router.get('/fail',function(req,res){
+  res.render("failed",{})
+})
+
+// Remplissage de la base de donnée, une fois suffit
 // router.get('/save', async function(req, res, next) {
 
 //   // How many journeys we want
-//   var count = 300
+//   var count = 1000
 
 //   // Save  ---------------------------------------------------
 //     for(var i = 0; i< count; i++){

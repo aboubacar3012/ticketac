@@ -12,7 +12,7 @@ var indexRouter = require('./routes/index');
 var authRouter = require('./routes/auth');
 var moment = require('moment'); // require
 var app = express();
- 
+
 app.locals.format_date = function(date){
   const newDate= moment(date).lang("fr").format('dddd Do MMMM YYYY'); 
   return newDate ;

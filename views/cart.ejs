@@ -83,7 +83,10 @@
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Return</button>
-            <a  href="/validate-cart" class="btn btn-primary">Procced to paiement</a>
+            <!-- <a  href="/validate-cart" class="btn btn-primary">Procced to paiement</a> -->
+            <form action="/create-checkout-session" method="POST">
+              <button class="btn btn-primary" type="submit">Procced to paiement</button>
+            </form>
           </div>
         </div>
       </div>
