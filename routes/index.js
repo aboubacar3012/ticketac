@@ -97,8 +97,8 @@ router.post('/create-checkout-session', async (req, res) => {
   const session = await stripe.checkout.sessions.create({
     line_items: carts,
     mode: 'payment',
-    success_url: `${process.env.api_url}/validate-cart`,
-    cancel_url: `${process.env.api_url}/fail`,
+    success_url: `/validate-cart`,
+    cancel_url: `/fail`,
   });
 
   res.redirect(303, session.url);
